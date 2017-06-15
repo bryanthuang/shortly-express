@@ -5,13 +5,13 @@ const partials = require('express-partials');
 const bodyParser = require('body-parser');
 const Auth = require('./middleware/auth');
 const models = require('./models');
-
+const db = require('./db');
 const app = express();
 
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'ejs');
 app.use(partials());
-app.use(bodyParser.json());
+app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -77,9 +77,49 @@ app.post('/links',
 /************************************************************/
 // Write your authentication routes here
 /************************************************************/
+app.get('/login', (req, res) => {
+  res.render('login');
+});
 
 
+app.post('/login', (req, res, next) => {
+  let options = {
+    username: req.body.username,
+  };
+  // options = JSON.stringify(options);
+  return models.Users.get(options)
+  .then(user => {
+    if (models.Users.compare(req.body.password, user.password, user.salt)) {
+      res.redirect('/');
+    } else {
+      console.log('username password did not work');
+      res.redirect('/login');
+    }
+  })
+  .catch(err => {
+    res.redirect('/login');
+  });
+});
 
+
+app.get('/signup', (req, res) => {
+  res.render('signup');
+});
+
+app.post('/signup', (req, res, next) => {
+  return models.Users.create({
+    username: req.body.username,
+    password: req.body.password
+  })
+  .then(users => {
+    res.redirect('/');
+  })
+  .catch(err => {
+    res.redirect('/signup');
+    // console.log('REDIRECT', err);
+  });
+  // next();
+});
 /************************************************************/
 // Handle the code parameter route last - if all other routes fail
 // assume the route is a short code and try and handle it here.
