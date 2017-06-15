@@ -3,22 +3,20 @@ const Promise = require('bluebird');
 
 module.exports.createSession = (req, res, next) => {
 // console.log(res) 
+
   return models.Sessions.create(req.cookies)
   .then(success => {
-    console.log('current cookie', req.cookies);
-    console.log(req.header);
-    return models.Sessions.get(req.cookies)
+    return models.Sessions.get({id: success.insertId})
     .then(session => {
       req.session = {hash: session.hash};
+      console.log(req.session, 'session right now');
     })
     .catch(err => {
       console.log('error first catch');
-      throw err;
     }); 
   })
   .catch(err => {
     console.log('second catchs');
-    throw err;
   });
   
   next();

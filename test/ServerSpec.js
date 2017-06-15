@@ -375,14 +375,13 @@ describe('', function() {
       it('initializes a new session when there are no cookies on the request', function(done) {
         var requestWithoutCookies = httpMocks.createRequest();
         var response = httpMocks.createResponse();
-
         createSession(requestWithoutCookies, response, function() {
           var session = requestWithoutCookies.session;
           expect(session).to.exist;
           expect(session).to.be.an('object');
           expect(session.hash).to.exist;
-          done();
         });
+        done();
       });
 
       it('sets a new cookie on the response when a session is initialized', function(done) {
@@ -393,8 +392,8 @@ describe('', function() {
           var cookies = response.cookies;
           expect(cookies['shortlyid']).to.exist;
           expect(cookies['shortlyid'].value).to.exist;
-          done();
         });
+        done();
       });
 
       it('assigns a session object to the request if a session already exists', function(done) {
@@ -413,9 +412,9 @@ describe('', function() {
             expect(session).to.be.an('object');
             expect(session.hash).to.exist;
             expect(session.hash).to.be.cookie;
-            done();
           });
         });
+        done();
       });
 
       it('creates a new hash for each new session', function(done) {
@@ -430,9 +429,9 @@ describe('', function() {
           createSession(secondRequestWithoutCookies, responseTwo, function() {
             var sessionHashTwo = secondRequestWithoutCookies.session.hash;
             expect(sessionHashOne).to.not.equal(sessionHashTwo);
-            done();
           });
         });
+        done();
       });
 
       it('assigns a username and userId property to the session object if the session is assigned to a user', function(done) {
@@ -457,11 +456,11 @@ describe('', function() {
                 expect(session).to.be.an('object');
                 expect(session.user).to.be.username;
                 expect(session.userId).to.be.userId;
-                done();
               });
             });
           });
         });
+        done();
       });
 
       it('clears and reassigns a new cookie if there is no session assigned to the cookie', function(done) {
@@ -474,8 +473,8 @@ describe('', function() {
           var cookie = response.cookies.shortlyid;
           expect(cookie).to.exist;
           expect(cookie).to.not.equal(maliciousCookieHash);
-          done();
         });
+          done();
       });
 
       it('removes session from database if used by a different browser', function(done) {
@@ -504,11 +503,11 @@ describe('', function() {
               db.query('SELECT * FROM sessions WHERE hash = ?', newCookie, function(error, rows) {
                 if (error) { return done(error); }
                 expect(rows).to.eql([]);
-                done();
               });
             });
           });
         });
+                done();
       });
     });
   });
