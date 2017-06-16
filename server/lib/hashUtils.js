@@ -6,8 +6,8 @@ const crypto = require('crypto');
 
 exports.createHash = (data, salt) => {
   let shasum = crypto.createHash('sha256');
-  // shasum.update(data + salt);
-  Object.keys(data).length === 0 ? shasum.update(salt) : shasum.update(data + salt);
+  shasum.update(data + salt);
+  // Object.keys(data).length === 0 ? shasum.update(salt) : shasum.update(data + salt);
   return shasum.digest('hex');
 };
 

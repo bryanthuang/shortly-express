@@ -111,14 +111,14 @@ app.post('/signup', (req, res, next) => {
     username: req.body.username,
     password: req.body.password
   })
-  .then(users => {
+  .then(user => {
+    //set cookie on user.
     res.redirect('/');
   })
   .catch(err => {
     res.redirect('/signup');
-    // console.log('REDIRECT', err);
   });
-  // next();
+  next();
 });
 /************************************************************/
 // Handle the code parameter route last - if all other routes fail
